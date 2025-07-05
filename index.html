@@ -3,22 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart BayKotha</title>
+    <title>স্মার্ট ব্যয়কথা - ব্যক্তিগত ব্যয় ট্র্যাকার</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #4361ee;
             --primary-light: #4895ef;
-            --primary-dark: #3f37c9;
+            --primary-dark: #3a0ca3;
+            --primary-gradient: linear-gradient(135deg, var(--primary), var(--primary-dark));
             --text: #2b2d42;
-            --text-light: #8d99ae;
+            --text-light: #6c757d;
             --bg: #f8f9fa;
             --card: #ffffff;
             --success: #4cc9f0;
+            --success-light: #e6f9ff;
             --danger: #f72585;
+            --danger-light: #ffebf3;
+            --warning: #ff9e00;
+            --warning-light: #fff4e0;
             --border: rgba(0,0,0,0.1);
-            --shadow: 0 10px 30px rgba(0,0,0,0.05);
+            --shadow: 0 4px 20px rgba(0,0,0,0.08);
+            --shadow-hover: 0 8px 30px rgba(0,0,0,0.12);
+            --radius: 12px;
+            --transition: all 0.3s ease;
         }
 
         * {
@@ -32,8 +40,7 @@
             background-color: var(--bg);
             color: var(--text);
             min-height: 100vh;
-            padding: 40px 20px;
-            direction: ltr;
+            padding: 30px 20px;
             position: relative;
             padding-bottom: 60px;
         }
@@ -43,78 +50,70 @@
             margin: 0 auto;
         }
 
-        /* Footer */
-        .copyright-footer {
-            text-align: center;
-            padding: 15px;
-            color: var(--text-light);
-            font-size: 12px;
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background-color: var(--bg);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-        }
-
-        .copyright-footer i {
-            color: var(--primary);
-        }
-
         /* Header */
         .app-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
+            position: relative;
         }
 
         .app-title {
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 700;
             color: var(--primary);
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
 
         .app-icon {
-            width: 36px;
-            height: 36px;
-            background: var(--primary);
+            width: 40px;
+            height: 40px;
+            background: var(--primary-gradient);
             color: white;
             border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
+            box-shadow: 0 4px 12px rgba(67, 97, 238, 0.3);
         }
 
         .user-avatar {
-            width: 40px;
-            height: 40px;
+            width: 42px;
+            height: 42px;
             border-radius: 50%;
-            background: var(--primary-light);
+            background: var(--primary-gradient);
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
             font-weight: 600;
             cursor: pointer;
+            box-shadow: 0 4px 12px rgba(67, 97, 238, 0.2);
+            transition: var(--transition);
+        }
+
+        .user-avatar:hover {
+            transform: scale(1.05);
         }
 
         /* Balance Card */
         .balance-card {
-            background: var(--primary);
+            background: var(--primary-gradient);
             color: white;
             padding: 25px;
-            border-radius: 16px;
-            margin-bottom: 15px;
+            border-radius: var(--radius);
+            margin-bottom: 20px;
             box-shadow: var(--shadow);
             position: relative;
             overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .balance-card:hover {
+            box-shadow: var(--shadow-hover);
         }
 
         .balance-card::after {
@@ -130,14 +129,15 @@
 
         .balance-title {
             font-size: 14px;
-            opacity: 0.8;
+            opacity: 0.9;
             margin-bottom: 5px;
         }
 
         .balance-amount {
             font-size: 32px;
             font-weight: 700;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
+            letter-spacing: 0.5px;
         }
 
         .balance-stats {
@@ -148,22 +148,23 @@
         .stat-item {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
         }
 
         .stat-icon {
-            width: 30px;
-            height: 30px;
-            border-radius: 8px;
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
             background: rgba(255,255,255,0.2);
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-shrink: 0;
         }
 
         .stat-text {
-            font-size: 12px;
-            opacity: 0.8;
+            font-size: 13px;
+            opacity: 0.9;
         }
 
         .stat-amount {
@@ -172,20 +173,53 @@
         }
 
         .income-stat .stat-amount {
-            color: var(--success);
+            color: #a7f3ff;
         }
 
         .expense-stat .stat-amount {
-            color: #ff9e9e;
+            color: #ffb3d1;
+        }
+
+        /* Month selector */
+        .month-selector-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .month-selector {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .month-selector:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .month-selector option {
+            background: var(--primary);
+            color: white;
         }
 
         /* Monthly Summary */
         .monthly-summary {
             background: var(--card);
             padding: 20px;
-            border-radius: 16px;
-            margin-bottom: 30px;
+            border-radius: var(--radius);
+            margin-bottom: 25px;
             box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .monthly-summary:hover {
+            box-shadow: var(--shadow-hover);
         }
 
         .summary-header {
@@ -200,12 +234,29 @@
             font-weight: 600;
         }
 
+        .summary-view {
+            font-size: 13px;
+            color: var(--primary);
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .summary-view:hover {
+            opacity: 0.8;
+        }
+
         .summary-item {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 10px;
-            padding-bottom: 10px;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
             border-bottom: 1px solid var(--border);
+            transition: var(--transition);
+        }
+
+        .summary-item:hover {
+            transform: translateX(5px);
         }
 
         .summary-month {
@@ -226,9 +277,14 @@
         .transaction-form {
             background: var(--card);
             padding: 25px;
-            border-radius: 16px;
-            margin-bottom: 30px;
+            border-radius: var(--radius);
+            margin-bottom: 25px;
             box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .transaction-form:hover {
+            box-shadow: var(--shadow-hover);
         }
 
         .form-title {
@@ -245,7 +301,7 @@
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 18px;
         }
 
         .form-row {
@@ -260,58 +316,73 @@
         .form-label {
             display: block;
             margin-bottom: 8px;
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 500;
             color: var(--text-light);
         }
 
         .form-input {
             width: 100%;
-            padding: 12px 15px;
+            padding: 13px 15px;
             border: 1px solid var(--border);
             border-radius: 10px;
             font-size: 15px;
-            transition: all 0.3s;
+            transition: var(--transition);
+            background-color: var(--bg);
         }
 
         .form-input:focus {
             outline: none;
             border-color: var(--primary-light);
             box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+            background-color: white;
         }
 
         .form-select {
             appearance: none;
             background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
             background-repeat: no-repeat;
-            background-position: right 10px center;
+            background-position: right 12px center;
             background-size: 15px;
+            cursor: pointer;
         }
 
         .btn {
-            background: var(--primary);
+            background: var(--primary-gradient);
             color: white;
             border: none;
-            padding: 14px;
+            padding: 15px;
             border-radius: 10px;
             font-size: 15px;
             font-weight: 600;
             width: 100%;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: var(--transition);
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
+            box-shadow: 0 4px 12px rgba(67, 97, 238, 0.2);
         }
 
         .btn:hover {
-            background: var(--primary-dark);
             transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(67, 97, 238, 0.3);
         }
 
         .btn:active {
             transform: translateY(0);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            box-shadow: none;
+        }
+
+        .btn-outline:hover {
+            background: rgba(67, 97, 238, 0.05);
         }
 
         /* Transactions List */
@@ -328,10 +399,15 @@
         }
 
         .view-all {
-            font-size: 13px;
+            font-size: 14px;
             color: var(--primary);
             font-weight: 500;
             cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .view-all:hover {
+            opacity: 0.8;
         }
 
         .transactions-list {
@@ -340,23 +416,44 @@
 
         .transaction-item {
             background: var(--card);
-            padding: 18px;
-            border-radius: 12px;
+            padding: 16px;
+            border-radius: var(--radius);
             margin-bottom: 12px;
             box-shadow: var(--shadow);
             display: flex;
             align-items: center;
-            transition: all 0.3s;
+            transition: var(--transition);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
         }
 
         .transaction-item:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .transaction-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: var(--primary);
+        }
+
+        .transaction-item.income::before {
+            background: var(--success);
+        }
+
+        .transaction-item.expense::before {
+            background: var(--danger);
         }
 
         .transaction-icon {
-            width: 42px;
-            height: 42px;
+            width: 44px;
+            height: 44px;
             border-radius: 10px;
             background: rgba(67, 97, 238, 0.1);
             color: var(--primary);
@@ -365,6 +462,17 @@
             justify-content: center;
             margin-right: 15px;
             flex-shrink: 0;
+            transition: var(--transition);
+        }
+
+        .transaction-item.income .transaction-icon {
+            background: var(--success-light);
+            color: var(--success);
+        }
+
+        .transaction-item.expense .transaction-icon {
+            background: var(--danger-light);
+            color: var(--danger);
         }
 
         .transaction-details {
@@ -381,20 +489,35 @@
         }
 
         .transaction-category {
-            font-size: 12px;
+            font-size: 13px;
             color: var(--text-light);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .transaction-category i {
+            font-size: 12px;
         }
 
         .transaction-date {
-            font-size: 11px;
+            font-size: 12px;
             color: var(--text-light);
-            margin-top: 2px;
+            margin-top: 4px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .transaction-date i {
+            font-size: 12px;
         }
 
         .transaction-amount {
             font-weight: 700;
             margin-left: 15px;
             flex-shrink: 0;
+            font-size: 16px;
         }
 
         .income .transaction-amount {
@@ -412,15 +535,16 @@
         }
 
         .empty-icon {
-            font-size: 50px;
+            font-size: 60px;
             color: var(--text-light);
-            opacity: 0.3;
+            opacity: 0.2;
             margin-bottom: 20px;
         }
 
         .empty-text {
             color: var(--text-light);
             margin-bottom: 20px;
+            font-size: 15px;
         }
 
         /* Setup Modal */
@@ -432,9 +556,11 @@
             width: 100%;
             height: 100%;
             background: rgba(0,0,0,0.5);
-            z-index: 100;
+            backdrop-filter: blur(5px);
+            z-index: 1000;
             justify-content: center;
             align-items: center;
+            animation: fadeIn 0.3s ease-out;
         }
 
         .modal-content {
@@ -443,21 +569,107 @@
             border-radius: 15px;
             width: 90%;
             max-width: 400px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transform: translateY(20px);
+            animation: slideUp 0.3s ease-out forwards;
         }
 
         .modal-title {
-            font-size: 20px;
+            font-size: 22px;
             font-weight: 700;
             margin-bottom: 20px;
             color: var(--primary);
             text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .modal-title i {
+            font-size: 26px;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: var(--bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .modal-close:hover {
+            background: #e9ecef;
+        }
+
+        /* Stats Modal */
+        .stats-container {
+            margin-top: 20px;
+        }
+
+        .stats-category {
+            margin-bottom: 20px;
+        }
+
+        .stats-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .stats-title i {
+            color: var(--primary);
+        }
+
+        .stats-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            padding: 8px 0;
+            border-bottom: 1px dashed var(--border);
+        }
+
+        .stats-category-name {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .stats-category-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            background: var(--bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 12px;
+        }
+
+        .stats-amount {
+            font-weight: 600;
         }
 
         /* Animations */
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
         .fade-in {
@@ -467,7 +679,7 @@
         /* Responsive */
         @media (max-width: 480px) {
             body {
-                padding: 30px 15px;
+                padding: 25px 15px;
             }
             
             .form-row {
@@ -479,36 +691,76 @@
                 flex-direction: column;
                 gap: 15px;
             }
+            
+            .transaction-item {
+                padding: 14px;
+            }
+            
+            .transaction-icon {
+                width: 40px;
+                height: 40px;
+                margin-right: 12px;
+            }
         }
 
-        /* Month selector */
-        .month-selector-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
+        /* Loading Spinner */
+        .spinner {
+            width: 24px;
+            height: 24px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            display: inline-block;
         }
 
-        .month-selector {
-            background: rgba(255,255,255,0.2);
-            border: none;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 8px;
-            font-size: 12px;
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
 
-        .month-selector option {
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
             background: var(--primary);
             color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 1001;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: slideUp 0.3s ease-out;
+            max-width: 90%;
+        }
+
+        .toast.success {
+            background: var(--success);
+        }
+
+        .toast.error {
+            background: var(--danger);
+        }
+
+        .toast i {
+            font-size: 18px;
         }
     </style>
 </head>
 <body>
     <!-- Setup Modal -->
     <div class="modal" id="setupModal">
-        <div class="modal-content fade-in">
-            <div class="modal-title">আপনার তথ্য দিন</div>
+        <div class="modal-content">
+            <div class="modal-close" id="closeSetupModal">
+                <i class="fas fa-times"></i>
+            </div>
+            <div class="modal-title">
+                <i class="fas fa-user-cog"></i>
+                আপনার তথ্য দিন
+            </div>
             <form id="setupForm">
                 <div class="form-group">
                     <label class="form-label" for="userName">আপনার নাম</label>
@@ -518,11 +770,27 @@
                     <label class="form-label" for="initialBalance">প্রাথমিক ব্যালেন্স</label>
                     <input type="number" class="form-input" id="initialBalance" placeholder="টাকার পরিমাণ লিখুন" required>
                 </div>
-                <button type="submit" class="btn">
+                <button type="submit" class="btn" id="setupSubmitBtn">
                     <i class="fas fa-check"></i>
                     সংরক্ষণ করুন
                 </button>
             </form>
+        </div>
+    </div>
+
+    <!-- Stats Modal -->
+    <div class="modal" id="statsModal">
+        <div class="modal-content">
+            <div class="modal-close" id="closeStatsModal">
+                <i class="fas fa-times"></i>
+            </div>
+            <div class="modal-title">
+                <i class="fas fa-chart-pie"></i>
+                বিস্তারিত পরিসংখ্যান
+            </div>
+            <div class="stats-container" id="statsContainer">
+                <!-- Stats will be populated here -->
+            </div>
         </div>
     </div>
 
@@ -531,7 +799,7 @@
         <header class="app-header">
             <div class="app-title">
                 <div class="app-icon">
-                    <i class="fas fa-money-bill-wave"></i>
+                    <i class="fas fa-wallet"></i>
                 </div>
                 <span>স্মার্ট ব্যয়কথা</span>
             </div>
@@ -543,7 +811,7 @@
             <div class="month-selector-container">
                 <div class="balance-title">মোট ব্যালেন্স</div>
                 <select class="month-selector" id="monthSelector">
-                    
+                    <option value="all">সব মাস</option>
                     <!-- Months will be added dynamically -->
                 </select>
             </div>
@@ -554,7 +822,7 @@
                         <i class="fas fa-arrow-up"></i>
                     </div>
                     <div>
-                        <div class="stat-text">আয়</div>
+                        <div class="stat-text">মোট আয়</div>
                         <div class="stat-amount" id="incomeAmount">৳০</div>
                     </div>
                 </div>
@@ -563,7 +831,7 @@
                         <i class="fas fa-arrow-down"></i>
                     </div>
                     <div>
-                        <div class="stat-text">ব্যয়</div>
+                        <div class="stat-text">মোট ব্যয়</div>
                         <div class="stat-amount" id="expenseAmount">৳০</div>
                     </div>
                 </div>
@@ -574,6 +842,9 @@
         <div class="monthly-summary fade-in">
             <div class="summary-header">
                 <div class="summary-title">মাসিক হিসাব</div>
+                <div class="summary-view" id="viewStatsBtn">
+                    <i class="fas fa-chart-pie"></i> পরিসংখ্যান
+                </div>
             </div>
             <div id="monthlySummaryList">
                 <!-- Monthly summaries will be added here -->
@@ -590,12 +861,12 @@
             <form id="transactionForm">
                 <div class="form-group">
                     <label class="form-label" for="description">বিবরণ</label>
-                    <input type="text" class="form-input" id="description" placeholder="যেমন: বসুন্ধরা থেকে জিনিসপত্র">
+                    <input type="text" class="form-input" id="description" placeholder="যেমন: বসুন্ধরা থেকে জিনিসপত্র" required>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
                         <label class="form-label" for="amount">টাকার পরিমাণ (৳)</label>
-                        <input type="number" class="form-input" id="amount" placeholder="যেমন: ৫০০">
+                        <input type="number" class="form-input" id="amount" placeholder="যেমন: ৫০০" required>
                     </div>
                     <div class="form-group">
                         <label class="form-label" for="type">ধরন</label>
@@ -607,20 +878,22 @@
                 </div>
                 <div class="form-group">
                     <label class="form-label" for="category">বিভাগ</label>
-                        <select class="form-input form-select" id="category">
-                            <option value="food">খাদ্য</option>
-                            <option value="shopping">কেনাকাটা</option>
-                            <option value="transport">যাতায়াত</option>
-                            <option value="entertainment">বিনোদন</option>
-                            <option value="bills">বিল</option>
-                            <option value="other">অন্যান্য</option>
-                        </select>
+                    <select class="form-input form-select" id="category">
+                        <option value="food">খাদ্য</option>
+                        <option value="shopping">কেনাকাটা</option>
+                        <option value="transport">যাতায়াত</option>
+                        <option value="entertainment">বিনোদন</option>
+                        <option value="bills">বিল</option>
+                        <option value="health">স্বাস্থ্য</option>
+                        <option value="education">শিক্ষা</option>
+                        <option value="other">অন্যান্য</option>
+                    </select>
                 </div>
                 <div class="form-group">
                     <label class="form-label" for="date">তারিখ</label>
                     <input type="date" class="form-input" id="date" value="">
                 </div>
-                <button type="submit" class="btn">
+                <button type="submit" class="btn" id="submitTransactionBtn">
                     <i class="fas fa-plus"></i>
                     যোগ করুন
                 </button>
@@ -630,7 +903,7 @@
         <!-- Transactions List -->
         <div class="transactions-header">
             <div class="section-title">সাম্প্রতিক লেনদেন</div>
-            <div class="view-all">সব দেখুন</div>
+            <div class="view-all" id="viewAllTransactions">সব দেখুন</div>
         </div>
         
         <ul class="transactions-list" id="transactionsList">
@@ -651,17 +924,20 @@
     <!-- Copyright Footer -->
     <div class="copyright-footer">
         <i class="fas fa-copyright"></i>
-        <span>সর্বস্বত্ব সংরক্ষিত - PDF LAGBE ? </span>
+        <span>সর্বস্বত্ব সংরক্ষিত - PDF Lagbe? </span>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // DOM Elements
             const setupModal = document.getElementById('setupModal');
+            const closeSetupModal = document.getElementById('closeSetupModal');
             const setupForm = document.getElementById('setupForm');
+            const setupSubmitBtn = document.getElementById('setupSubmitBtn');
             const mainApp = document.getElementById('mainApp');
             const userAvatar = document.getElementById('userAvatar');
             const transactionForm = document.getElementById('transactionForm');
+            const submitTransactionBtn = document.getElementById('submitTransactionBtn');
             const transactionsList = document.getElementById('transactionsList');
             const balanceAmount = document.getElementById('balanceAmount');
             const incomeAmount = document.getElementById('incomeAmount');
@@ -669,6 +945,11 @@
             const monthSelector = document.getElementById('monthSelector');
             const dateInput = document.getElementById('date');
             const monthlySummaryList = document.getElementById('monthlySummaryList');
+            const viewStatsBtn = document.getElementById('viewStatsBtn');
+            const statsModal = document.getElementById('statsModal');
+            const closeStatsModal = document.getElementById('closeStatsModal');
+            const statsContainer = document.getElementById('statsContainer');
+            const viewAllTransactions = document.getElementById('viewAllTransactions');
             
             // Set default date to today
             dateInput.valueAsDate = new Date();
@@ -681,10 +962,15 @@
                 setupModal.style.display = 'flex';
             } else {
                 mainApp.style.display = 'block';
-                userAvatar.textContent = userName.charAt(0);
+                userAvatar.textContent = userName.charAt(0).toUpperCase();
                 // Initialize the app with existing data
                 initializeApp(parseFloat(initialBalance));
             }
+            
+            // Close setup modal
+            closeSetupModal.addEventListener('click', function() {
+                setupModal.style.display = 'none';
+            });
             
             // Setup form submission
             setupForm.addEventListener('submit', function(e) {
@@ -694,19 +980,32 @@
                 const initialBalanceInput = parseFloat(document.getElementById('initialBalance').value);
                 
                 if (!userNameInput || isNaN(initialBalanceInput)) {
-                    alert('দয়া করে সঠিক নাম এবং প্রাথমিক ব্যালেন্স দিন');
+                    showToast('দয়া করে সঠিক নাম এবং প্রাথমিক ব্যালেন্স দিন', 'error');
                     return;
                 }
                 
-                localStorage.setItem('expenseUserName', userNameInput);
-                localStorage.setItem('initialBalance', initialBalanceInput);
+                // Show loading state
+                setupSubmitBtn.innerHTML = '<div class="spinner"></div> প্রক্রিয়াকরণ...';
+                setupSubmitBtn.disabled = true;
                 
-                userAvatar.textContent = userNameInput.charAt(0);
-                setupModal.style.display = 'none';
-                mainApp.style.display = 'block';
-                
-                // Initialize with initial balance
-                initializeApp(initialBalanceInput);
+                // Simulate async operation
+                setTimeout(() => {
+                    localStorage.setItem('expenseUserName', userNameInput);
+                    localStorage.setItem('initialBalance', initialBalanceInput);
+                    
+                    userAvatar.textContent = userNameInput.charAt(0).toUpperCase();
+                    setupModal.style.display = 'none';
+                    mainApp.style.display = 'block';
+                    
+                    // Initialize with initial balance
+                    initializeApp(initialBalanceInput);
+                    
+                    // Reset button
+                    setupSubmitBtn.innerHTML = '<i class="fas fa-check"></i> সংরক্ষণ করুন';
+                    setupSubmitBtn.disabled = false;
+                    
+                    showToast('আপনার তথ্য সফলভাবে সংরক্ষণ করা হয়েছে!', 'success');
+                }, 1000);
             });
             
             function initializeApp(initialBalance) {
@@ -737,6 +1036,24 @@
                     updateBalance();
                     updateTransactionsList();
                 });
+                
+                // Add event listener for view stats button
+                viewStatsBtn.addEventListener('click', function() {
+                    showStatsModal();
+                });
+                
+                // Add event listener for close stats modal
+                closeStatsModal.addEventListener('click', function() {
+                    statsModal.style.display = 'none';
+                });
+                
+                // Add event listener for view all transactions
+                viewAllTransactions.addEventListener('click', function() {
+                    monthSelector.value = 'all';
+                    updateTransactionsList();
+                    updateBalance();
+                    showToast('সমস্ত লেনদেন দেখানো হচ্ছে', 'success');
+                });
             }
             
             // Add new transaction
@@ -750,9 +1067,13 @@
                 const date = document.getElementById('date').value || new Date().toISOString().split('T')[0];
                 
                 if (!description || isNaN(amount)) {
-                    alert('দয়া করে সঠিক বিবরণ এবং টাকার পরিমাণ দিন');
+                    showToast('দয়া করে সঠিক বিবরণ এবং টাকার পরিমাণ দিন', 'error');
                     return;
                 }
+                
+                // Show loading state
+                submitTransactionBtn.innerHTML = '<div class="spinner"></div> প্রক্রিয়াকরণ...';
+                submitTransactionBtn.disabled = true;
                 
                 const newTransaction = {
                     id: Date.now(),
@@ -777,6 +1098,13 @@
                 // Reset form
                 transactionForm.reset();
                 dateInput.valueAsDate = new Date();
+                
+                // Reset button after delay
+                setTimeout(() => {
+                    submitTransactionBtn.innerHTML = '<i class="fas fa-plus"></i> যোগ করুন';
+                    submitTransactionBtn.disabled = false;
+                    showToast('লেনদেন সফলভাবে যোগ করা হয়েছে!', 'success');
+                }, 800);
             });
             
             // Update transactions list
@@ -824,10 +1152,10 @@
                 
                 transactionsList.innerHTML = '';
                 
-                // Show only last 5 transactions
-                const recentTransactions = filteredTransactions.slice(0, 5);
+                // Show only last 5 transactions when not viewing all
+                const transactionsToShow = selectedMonth === 'all' ? filteredTransactions.slice(0, 20) : filteredTransactions.slice(0, 5);
                 
-                recentTransactions.forEach(transaction => {
+                transactionsToShow.forEach(transaction => {
                     const transactionEl = document.createElement('li');
                     transactionEl.className = `transaction-item ${transaction.type} fade-in`;
                     
@@ -843,13 +1171,24 @@
                         </div>
                         <div class="transaction-details">
                             <div class="transaction-title">${transaction.description}</div>
-                            <div class="transaction-category">${formatCategory(transaction.category)}</div>
-                            <div class="transaction-date">${formattedDate}</div>
+                            <div class="transaction-category">
+                                <i class="fas fa-${getCategoryIcon(transaction.category)}"></i>
+                                ${formatCategory(transaction.category)}
+                            </div>
+                            <div class="transaction-date">
+                                <i class="far fa-calendar-alt"></i>
+                                ${formattedDate}
+                            </div>
                         </div>
                         <div class="transaction-amount">
                             ${transaction.type === 'income' ? '+' : '-'}৳${transaction.amount.toFixed(2)}
                         </div>
                     `;
+                    
+                    // Add click event to show transaction details (could be expanded in future)
+                    transactionEl.addEventListener('click', function() {
+                        showToast(`${transaction.description} - ${transaction.type === 'income' ? 'আয়' : 'ব্যয়'} ৳${transaction.amount.toFixed(2)}`, 'success');
+                    });
                     
                     transactionsList.appendChild(transactionEl);
                 });
@@ -883,6 +1222,13 @@
                 balanceAmount.textContent = `৳${balance.toFixed(2)}`;
                 incomeAmount.textContent = `৳${income.toFixed(2)}`;
                 expenseAmount.textContent = `৳${expense.toFixed(2)}`;
+                
+                // Update balance color based on value
+                if (balance < 0) {
+                    balanceAmount.style.color = '#ff6b6b';
+                } else {
+                    balanceAmount.style.color = 'white';
+                }
             }
             
             // Update monthly summary
@@ -900,7 +1246,9 @@
                     if (!monthlySummary[monthKey]) {
                         monthlySummary[monthKey] = {
                             income: 0,
-                            expense: 0
+                            expense: 0,
+                            year: year,
+                            month: month
                         };
                     }
                     
@@ -912,7 +1260,9 @@
                 });
                 
                 // Sort months by newest first
-                const sortedMonths = Object.keys(monthlySummary).sort().reverse();
+                const sortedMonths = Object.keys(monthlySummary).sort((a, b) => {
+                    return new Date(b.split('-')[0], b.split('-')[1]) - new Date(a.split('-')[0], a.split('-')[1]);
+                });
                 
                 if (sortedMonths.length === 0) {
                     monthlySummaryList.innerHTML = '<div class="empty-text" style="text-align: center;">কোন মাসিক তথ্য নেই</div>';
@@ -921,17 +1271,16 @@
                 
                 monthlySummaryList.innerHTML = '';
                 
-                // Display monthly summaries
-                sortedMonths.forEach(monthKey => {
-                    const [year, month] = monthKey.split('-');
-                    const monthName = getMonthName(parseInt(month));
+                // Display monthly summaries (last 3 months)
+                sortedMonths.slice(0, 3).forEach(monthKey => {
                     const summary = monthlySummary[monthKey];
+                    const monthName = getMonthName(parseInt(summary.month));
                     
                     const summaryItem = document.createElement('div');
                     summaryItem.className = 'summary-item';
                     
                     summaryItem.innerHTML = `
-                        <div class="summary-month">${monthName} ${year}</div>
+                        <div class="summary-month">${monthName} ${summary.year}</div>
                         <div>
                             <span class="summary-income">৳${summary.income.toFixed(2)}</span> / 
                             <span class="summary-expense">৳${summary.expense.toFixed(2)}</span>
@@ -940,6 +1289,108 @@
                     
                     monthlySummaryList.appendChild(summaryItem);
                 });
+            }
+            
+            // Show stats modal
+            function showStatsModal() {
+                const transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+                const selectedMonth = monthSelector.value;
+                
+                // Filter transactions by selected month
+                let filteredTransactions = transactions;
+                if (selectedMonth !== 'all') {
+                    filteredTransactions = transactions.filter(transaction => {
+                        if (!transaction.date) return false;
+                        const transactionMonth = transaction.date.split('-')[1];
+                        return transactionMonth === selectedMonth;
+                    });
+                }
+                
+                // Group by category
+                const incomeByCategory = {};
+                const expenseByCategory = {};
+                
+                filteredTransactions.forEach(transaction => {
+                    if (transaction.type === 'income') {
+                        if (!incomeByCategory[transaction.category]) {
+                            incomeByCategory[transaction.category] = 0;
+                        }
+                        incomeByCategory[transaction.category] += transaction.amount;
+                    } else {
+                        if (!expenseByCategory[transaction.category]) {
+                            expenseByCategory[transaction.category] = 0;
+                        }
+                        expenseByCategory[transaction.category] += transaction.amount;
+                    }
+                });
+                
+                // Sort categories by amount
+                const sortedIncomeCategories = Object.keys(incomeByCategory).sort((a, b) => incomeByCategory[b] - incomeByCategory[a]);
+                const sortedExpenseCategories = Object.keys(expenseByCategory).sort((a, b) => expenseByCategory[b] - expenseByCategory[a]);
+                
+                // Build stats HTML
+                let statsHTML = '';
+                
+                // Income stats
+                if (sortedIncomeCategories.length > 0) {
+                    statsHTML += `
+                        <div class="stats-category">
+                            <div class="stats-title">
+                                <i class="fas fa-arrow-up"></i>
+                                আয়ের বিভাগ
+                            </div>
+                    `;
+                    
+                    sortedIncomeCategories.forEach(category => {
+                        statsHTML += `
+                            <div class="stats-item">
+                                <div class="stats-category-name">
+                                    <div class="stats-category-icon">
+                                        <i class="fas fa-${getCategoryIcon(category)}"></i>
+                                    </div>
+                                    ${formatCategory(category)}
+                                </div>
+                                <div class="stats-amount summary-income">৳${incomeByCategory[category].toFixed(2)}</div>
+                            </div>
+                        `;
+                    });
+                    
+                    statsHTML += `</div>`;
+                }
+                
+                // Expense stats
+                if (sortedExpenseCategories.length > 0) {
+                    statsHTML += `
+                        <div class="stats-category">
+                            <div class="stats-title">
+                                <i class="fas fa-arrow-down"></i>
+                                ব্যয়ের বিভাগ
+                            </div>
+                    `;
+                    
+                    sortedExpenseCategories.forEach(category => {
+                        statsHTML += `
+                            <div class="stats-item">
+                                <div class="stats-category-name">
+                                    <div class="stats-category-icon">
+                                        <i class="fas fa-${getCategoryIcon(category)}"></i>
+                                    </div>
+                                    ${formatCategory(category)}
+                                </div>
+                                <div class="stats-amount summary-expense">৳${expenseByCategory[category].toFixed(2)}</div>
+                            </div>
+                        `;
+                    });
+                    
+                    statsHTML += `</div>`;
+                }
+                
+                if (statsHTML === '') {
+                    statsHTML = '<div class="empty-text" style="text-align: center;">কোন পরিসংখ্যান নেই</div>';
+                }
+                
+                statsContainer.innerHTML = statsHTML;
+                statsModal.style.display = 'flex';
             }
             
             // Populate month selector with available months
@@ -956,8 +1407,8 @@
                 const months = new Set();
                 transactions.forEach(transaction => {
                     if (transaction.date) {
-                        const month = transaction.date.split('-')[1];
-                        months.add(month);
+                        const [year, month] = transaction.date.split('-').slice(0, 2);
+                        months.add(`${year}-${month}`);
                     }
                 });
                 
@@ -969,17 +1420,44 @@
                 ];
                 
                 // Convert to array and sort by newest first
-                const sortedMonths = Array.from(months).sort((a, b) => b - a);
+                const sortedMonths = Array.from(months).sort((a, b) => {
+                    return new Date(b.split('-')[0], b.split('-')[1]) - new Date(a.split('-')[0], a.split('-')[1]);
+                });
                 
-                sortedMonths.forEach(month => {
+                sortedMonths.forEach(monthKey => {
+                    const [year, month] = monthKey.split('-');
                     const monthIndex = parseInt(month) - 1;
                     if (monthIndex >= 0 && monthIndex < 12) {
                         const option = document.createElement('option');
                         option.value = month;
-                        option.textContent = monthNames[monthIndex];
+                        option.textContent = `${monthNames[monthIndex]} ${year}`;
                         monthSelect.appendChild(option);
                     }
                 });
+                
+                // Set default to current month if available
+                const currentMonth = new Date().getMonth() + 1;
+                const currentMonthStr = currentMonth < 10 ? `0${currentMonth}` : `${currentMonth}`;
+                if (monthSelect.querySelector(`option[value="${currentMonthStr}"]`)) {
+                    monthSelect.value = currentMonthStr;
+                }
+            }
+            
+            // Show toast notification
+            function showToast(message, type = 'success') {
+                const toast = document.createElement('div');
+                toast.className = `toast ${type}`;
+                toast.innerHTML = `
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+                    <span>${message}</span>
+                `;
+                
+                document.body.appendChild(toast);
+                
+                // Remove after 3 seconds
+                setTimeout(() => {
+                    toast.remove();
+                }, 3000);
             }
             
             // Helper functions
@@ -990,6 +1468,8 @@
                     transport: "যাতায়াত",
                     entertainment: "বিনোদন",
                     bills: "বিল",
+                    health: "স্বাস্থ্য",
+                    education: "শিক্ষা",
                     initial: "প্রাথমিক ব্যালেন্স",
                     other: "অন্যান্য"
                 };
@@ -1003,6 +1483,8 @@
                     transport: "car",
                     entertainment: "film",
                     bills: "file-invoice-dollar",
+                    health: "heartbeat",
+                    education: "book-open",
                     initial: "money-bill-wave",
                     other: "receipt"
                 };
@@ -1021,7 +1503,7 @@
                 
                 const monthIndex = parseInt(month) - 1;
                 if (monthIndex >= 0 && monthIndex < 12) {
-                    return `${day}/${month}/${year} (${monthNames[monthIndex]})`;
+                    return `${day}/${month}/${year}`;
                 }
                 return `${day}/${month}/${year}`;
             }
