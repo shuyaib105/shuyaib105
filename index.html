@@ -661,6 +661,35 @@
             font-weight: 600;
         }
 
+        /* Copyright Footer */
+        .copyright-footer {
+            text-align: center;
+            padding: 15px;
+            color: var(--text-light);
+            font-size: 14px;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: var(--bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            border-top: 1px solid var(--border);
+        }
+
+        .copyright-footer i {
+            color: var(--primary);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
         /* Animations */
         @keyframes fadeIn {
             from { opacity: 0; }
@@ -674,33 +703,6 @@
 
         .fade-in {
             animation: fadeIn 0.5s ease-out;
-        }
-
-        /* Responsive */
-        @media (max-width: 480px) {
-            body {
-                padding: 25px 15px;
-            }
-            
-            .form-row {
-                flex-direction: column;
-                gap: 0;
-            }
-            
-            .balance-stats {
-                flex-direction: column;
-                gap: 15px;
-            }
-            
-            .transaction-item {
-                padding: 14px;
-            }
-            
-            .transaction-icon {
-                width: 40px;
-                height: 40px;
-                margin-right: 12px;
-            }
         }
 
         /* Loading Spinner */
@@ -747,6 +749,33 @@
 
         .toast i {
             font-size: 18px;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            body {
+                padding: 25px 15px;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .balance-stats {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .transaction-item {
+                padding: 14px;
+            }
+            
+            .transaction-icon {
+                width: 40px;
+                height: 40px;
+                margin-right: 12px;
+            }
         }
     </style>
 </head>
@@ -924,7 +953,7 @@
     <!-- Copyright Footer -->
     <div class="copyright-footer">
         <i class="fas fa-copyright"></i>
-        <span>সর্বস্বত্ব সংরক্ষিত - PDF Lagbe? </span>
+        <span>সর্বস্বত্ব সংরক্ষিত - PDF LAGBE ?</span>
     </div>
 
     <script>
